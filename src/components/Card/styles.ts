@@ -20,8 +20,10 @@ export const CardContainer = styled.button`
   }
 
   & > header {
+    width: 100%;
     display: flex;
     align-items: flex-start;
+    justify-content: space-between;
     gap: 1rem;
 
     margin-bottom: 1.25rem;

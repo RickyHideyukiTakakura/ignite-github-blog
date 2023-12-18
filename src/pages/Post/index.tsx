@@ -1,9 +1,13 @@
+import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import arrowLeftIcon from "../../assets/icons/arrow-left.svg";
 import calendarIcon from "../../assets/icons/calendar.svg";
 import commentIcon from "../../assets/icons/comment.svg";
 import githubIcon from "../../assets/icons/github.svg";
 import linkIcon from "../../assets/icons/link.svg";
 import { Header } from "../../components/Header";
+import { GithubContext } from "../../contexts/GithubContext";
+import { dataFormatter } from "../../utils/formatter";
 import {
   InfoList,
   PostContainer,
@@ -13,6 +17,18 @@ import {
 } from "./styles";
 
 export function Post() {
+  const { issues } = useContext(GithubContext);
+  const params = useParams();
+
+  const issueByNumber =
+    issues &&
+    issues.items &&
+    issues.items.find((issue) => issue.number === Number(params.id));
+
+  if (!issueByNumber) {
+    return null;
+  }
+
   return (
     <>
       <Header />
@@ -30,35 +46,25 @@ export function Post() {
             </a>
           </PostInfoHeader>
 
-          <strong>JavaScript data types and data structures</strong>
+          <strong>{issueByNumber.title}</strong>
 
           <InfoList>
             <li>
               <img src={githubIcon} />
-              RickyTakakura
+              {issueByNumber.user.login}
             </li>
             <li>
               <img src={calendarIcon} />
-              Há 1 dia
+              {dataFormatter.format(new Date(issueByNumber.created_at))}
             </li>
             <li>
               <img src={commentIcon} />
-              15 comentários
+              {issueByNumber.comments} comentários
             </li>
           </InfoList>
         </PostInfoContainer>
 
-        <PostContent>
-          Programming languages all have built-in data structures, but these
-          often differ from one language to another. This article attempts to
-          list the built-in data structures available in JavaScript and what
-          properties they have. These can be used to build other data
-          structures. Wherever possible, comparisons with other languages are
-          drawn. Dynamic typing JavaScript is a loosely typed and dynamic
-          language. Variables in JavaScript are not directly associated with any
-          particular value type, and any variable can be assigned (and
-          re-assigned) values of all types:
-        </PostContent>
+        <PostContent>{issueByNumber.body}</PostContent>
       </PostContainer>
     </>
   );
