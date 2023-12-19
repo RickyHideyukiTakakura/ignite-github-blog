@@ -8,6 +8,7 @@ interface UserData {
   company: string;
   followers: number;
   avatar_url: string;
+  html_url: string;
 }
 
 interface IssueItem {
@@ -17,6 +18,7 @@ interface IssueItem {
   comments: number;
   number: number;
   created_at: string;
+  html_url: string;
   user: {
     login: string;
   };
@@ -30,6 +32,7 @@ interface Issues {
 interface GithubContextType {
   userData: UserData;
   issues: Issues;
+  fetchRepositoryIssues: (query?: string) => Promise<void>;
 }
 
 interface GithubProviderProps {
@@ -48,14 +51,16 @@ export function GithubProvider({ children }: GithubProviderProps) {
   async function fetchUserData() {
     const response = await api.get(`/users/${username}`);
 
-    setUserData({
-      name: response.data.name,
-      login: response.data.login,
-      bio: response.data.bio,
-      company: response.data.company,
-      followers: response.data.followers,
-      avatar_url: response.data.avatar_url,
-    });
+    setUserData(response.data);
+    // {
+    //   name: response.data.name,
+    //   login: response.data.login,
+    //   bio: response.data.bio,
+    //   company: response.data.company,
+    //   followers: response.data.followers,
+    //   avatar_url: response.data.avatar_url,
+    //   html_url: response.data.html_url,
+    // }
   }
 
   async function fetchRepositoryIssues(query?: string) {
@@ -79,7 +84,7 @@ export function GithubProvider({ children }: GithubProviderProps) {
   }, []);
 
   return (
-    <GithubContext.Provider value={{ userData, issues }}>
+    <GithubContext.Provider value={{ userData, issues, fetchRepositoryIssues }}>
       {children}
     </GithubContext.Provider>
   );

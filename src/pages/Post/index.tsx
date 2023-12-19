@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import Markdown from "react-markdown";
+import { NavLink, useParams } from "react-router-dom";
 import arrowLeftIcon from "../../assets/icons/arrow-left.svg";
 import calendarIcon from "../../assets/icons/calendar.svg";
 import commentIcon from "../../assets/icons/comment.svg";
@@ -36,14 +37,14 @@ export function Post() {
       <PostContainer>
         <PostInfoContainer>
           <PostInfoHeader>
-            <a href="/">
+            <NavLink to="/">
               <img src={arrowLeftIcon} alt="" />
               Voltar
-            </a>
-            <a href="#">
+            </NavLink>
+            <NavLink to={issueByNumber.html_url} target="_blank">
               Ver no Github
               <img src={linkIcon} alt="" />
-            </a>
+            </NavLink>
           </PostInfoHeader>
 
           <strong>{issueByNumber.title}</strong>
@@ -64,7 +65,9 @@ export function Post() {
           </InfoList>
         </PostInfoContainer>
 
-        <PostContent>{issueByNumber.body}</PostContent>
+        <PostContent>
+          <Markdown>{issueByNumber.body}</Markdown>
+        </PostContent>
       </PostContainer>
     </>
   );

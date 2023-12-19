@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import buildingIcon from "../../assets/icons/building.svg";
 import githubIcon from "../../assets/icons/github.svg";
 import linkIcon from "../../assets/icons/link.svg";
@@ -21,10 +22,10 @@ export function Profile() {
       <ProfileContent>
         <ProfileHeader>
           <h2>{userData.name}</h2>
-          <a href="#">
+          <NavLink to={userData.html_url} target="_blank">
             Github
             <img src={linkIcon} />
-          </a>
+          </NavLink>
         </ProfileHeader>
 
         <span>{userData.bio}</span>
@@ -40,7 +41,7 @@ export function Profile() {
           </li>
           <li>
             <img src={userGroupIcon} />
-            {userData.followers}
+            {userData.followers} followers
           </li>
         </InfoList>
       </ProfileContent>
