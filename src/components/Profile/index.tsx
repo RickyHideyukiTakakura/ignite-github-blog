@@ -1,5 +1,5 @@
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { useContextSelector } from "use-context-selector";
 import buildingIcon from "../../assets/icons/building.svg";
 import githubIcon from "../../assets/icons/github.svg";
 import linkIcon from "../../assets/icons/link.svg";
@@ -13,7 +13,9 @@ import {
 } from "./styles";
 
 export function Profile() {
-  const { userData } = useContext(GithubContext);
+  const userData = useContextSelector(GithubContext, (context) => {
+    return context.userData;
+  });
 
   return (
     <ProfileContainer>

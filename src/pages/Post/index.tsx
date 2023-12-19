@@ -1,6 +1,6 @@
-import { useContext } from "react";
 import Markdown from "react-markdown";
 import { NavLink, useParams } from "react-router-dom";
+import { useContextSelector } from "use-context-selector";
 import arrowLeftIcon from "../../assets/icons/arrow-left.svg";
 import calendarIcon from "../../assets/icons/calendar.svg";
 import commentIcon from "../../assets/icons/comment.svg";
@@ -18,7 +18,9 @@ import {
 } from "./styles";
 
 export function Post() {
-  const { issues } = useContext(GithubContext);
+  const issues = useContextSelector(GithubContext, (context) => {
+    return context.issues;
+  });
   const params = useParams();
 
   const issueByNumber =

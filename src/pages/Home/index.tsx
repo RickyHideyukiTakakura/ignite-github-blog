@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContextSelector } from "use-context-selector";
 import { Card } from "../../components/Card";
 import { Header } from "../../components/Header";
 import { Profile } from "../../components/Profile";
@@ -12,7 +12,9 @@ import {
 } from "./styles";
 
 export function Home() {
-  const { issues } = useContext(GithubContext);
+  const issues = useContextSelector(GithubContext, (context) => {
+    return context.issues;
+  });
 
   return (
     <>

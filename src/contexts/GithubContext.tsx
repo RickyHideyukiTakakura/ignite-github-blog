@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext } from "use-context-selector";
 import { api } from "../services/api";
 
 interface UserData {
@@ -48,22 +49,13 @@ export function GithubProvider({ children }: GithubProviderProps) {
   const [userData, setUserData] = useState<UserData>({} as UserData);
   const [issues, setIssues] = useState<Issues>({} as Issues);
 
-  async function fetchUserData() {
+  const fetchUserData = useCallback(async () => {
     const response = await api.get(`/users/${username}`);
 
     setUserData(response.data);
-    // {
-    //   name: response.data.name,
-    //   login: response.data.login,
-    //   bio: response.data.bio,
-    //   company: response.data.company,
-    //   followers: response.data.followers,
-    //   avatar_url: response.data.avatar_url,
-    //   html_url: response.data.html_url,
-    // }
-  }
+  }, []);
 
-  async function fetchRepositoryIssues(query?: string) {
+  const fetchRepositoryIssues = useCallback(async (query?: string) => {
     if (!query) {
       query = "";
     }
@@ -76,12 +68,12 @@ export function GithubProvider({ children }: GithubProviderProps) {
     });
 
     setIssues(response.data);
-  }
+  }, []);
 
   useEffect(() => {
     fetchUserData();
     fetchRepositoryIssues();
-  }, []);
+  }, [fetchRepositoryIssues, fetchUserData]);
 
   return (
     <GithubContext.Provider value={{ userData, issues, fetchRepositoryIssues }}>
